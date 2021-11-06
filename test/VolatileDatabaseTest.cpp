@@ -25,23 +25,6 @@ const std::vector<Seance> ALL_SEANCES = {
     Seance{6, ALL_MOVIES[3], ALL_THEATERS[1]}
 };
 
-
-class VolatileDatabaseWithData : public VolatileDatabase
-{
-public:
-    void addSeances(const std::vector<Seance>& seances)
-    {
-        for (const auto& seance : seances)
-        {
-            seances_.push_back(seance);
-            reservations_[seance.id_] = Seats(SEATS_COUNT);
-            std::iota(reservations_[seance.id_].begin(), reservations_[seance.id_].end(), 0);
-        }
-    }
-
-};
-
-
 class VolatileDatabaseTests : public ::testing::Test {
 public:
     VolatileDatabaseTests( )
@@ -63,7 +46,7 @@ public:
     {
     }
 
-    VolatileDatabaseWithData db_;
+    VolatileDatabase db_;
 };
 
 

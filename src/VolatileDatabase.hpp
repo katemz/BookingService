@@ -10,6 +10,7 @@
 
 #include <set>
 #include <map>
+#include <string>
 
 class VolatileDatabase : public IDatabase
 {
@@ -25,15 +26,7 @@ public:
     void reset();
     void clearCache();
 
-    void addSeances(const std::vector<Seance>& seances)
-    {
-        for (const auto& seance : seances)
-        {
-            seances_.push_back(seance);
-            reservations_[seance.id_] = Seats(SEATS_COUNT);
-            std::iota(reservations_[seance.id_].begin(), reservations_[seance.id_].end(), 0);
-        }
-    }
+    void addSeances(const std::vector<Seance>& seances);
 
 protected:
     std::vector<Seance> seances_;
