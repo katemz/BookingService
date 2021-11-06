@@ -1,41 +1,20 @@
 #include "gtest/gtest.h"
 #include "VolatileDatabase.hpp"
+#include "ExampleData.hpp"
 
 #include <iostream>
 #include <numeric>
-
-const std::vector<Movie> ALL_MOVIES = {
-    Movie{0, "Dune"},
-    Movie{1, "MrHyde"},
-    Movie{2, "Batman"},
-    Movie{3, "Spiderman"}};
-
-const std::vector<Theater> ALL_THEATERS = {
-    Theater{0, "NoweHoryzonty"},
-    Theater{1, "Helios"},
-    Theater{2, "CinemaCity"}};
-
-const std::vector<Seance> ALL_SEANCES = {
-    Seance{0, ALL_MOVIES[1], ALL_THEATERS[0]},
-    Seance{1, ALL_MOVIES[0], ALL_THEATERS[0]},
-    Seance{2, ALL_MOVIES[2], ALL_THEATERS[0]},
-    Seance{3, ALL_MOVIES[2], ALL_THEATERS[1]},
-    Seance{4, ALL_MOVIES[0], ALL_THEATERS[2]},
-    Seance{5, ALL_MOVIES[3], ALL_THEATERS[2]},
-    Seance{6, ALL_MOVIES[3], ALL_THEATERS[1]}
-};
 
 class VolatileDatabaseTests : public ::testing::Test {
 public:
     VolatileDatabaseTests( )
     {
-        // initialization code here
     }
 
     void SetUp( )
     {
         db_.reset();
-        db_.addSeances(ALL_SEANCES);
+        db_.addSeances(data_.getExampleSeancesList());
     }
 
     void TearDown( )
@@ -47,14 +26,15 @@ public:
     }
 
     VolatileDatabase db_;
+    ExampleData data_;
 };
 
 
-//TEST_F(VolatileDatabaseTests, getAllPlayingMoviesTest)
-//{
-//    auto allPlayingMovies = db_.getAllPlayingMovies();
-//    EXPECT_EQ(allPlayingMovies, ALL_MOVIES);
-//}
+TEST_F(VolatileDatabaseTests, getAllPlayingMoviesTest)
+{
+    auto allPlayingMovies = db_.getAllPlayingMovies();
+    EXPECT_EQ(allPlayingMovies, data_.getExampleMoviesList());
+}
 
 //TEST_F(VolatileDatabaseTests, getTheatersPlayingMovie)
 //{

@@ -13,8 +13,8 @@ using Seats = std::list<uint16_t>;
 struct Seance
 {
     SeanceId id_;
-    Movie movie_;
-    Theater theater_;
+    MovieName movie_;
+    TheaterName theater_;
 };
 
 #endif // SEANCE_HPP

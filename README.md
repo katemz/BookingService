@@ -14,6 +14,8 @@ make all
 
 Assumptions:
 - There is only 0 or 1 seance for specific movie in given theater (no calendar/time)
+- movie name is unique
+- theater name is unique
 
 
 

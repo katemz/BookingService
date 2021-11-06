@@ -7,9 +7,9 @@
 
 VolatileDatabase::VolatileDatabase()
     : seances_(),
-      cachedAllMovies_()
+      cachedAllMovies_(),
+      cachedMoviesToTheaterListMap_()
 {
-
 }
 
 std::vector<MovieName> VolatileDatabase::getAllPlayingMovies()
@@ -20,7 +20,7 @@ std::vector<MovieName> VolatileDatabase::getAllPlayingMovies()
 
         for (const auto& seance : seances_)
         {
-            moviesWithoutDups.insert(seance.movie_.name_);
+            moviesWithoutDups.insert(seance.movie_);
         }
 
         std::copy(moviesWithoutDups.begin(), moviesWithoutDups.end(), std::back_inserter(cachedAllMovies_));
@@ -48,17 +48,17 @@ std::vector<TheaterName> VolatileDatabase::getAllTheatersPlayingMovie(const Movi
 
         for (const auto& seance : seances_)
         {
-            std::cout << "Seance: " << seance.movie_.name_ << " in " << seance.theater_.name_ << std::endl;
+            std::cout << "Seance: " << seance.movie_ << " in " << seance.theater_ << std::endl;
 
-            if (cachedMoviesToTheaterListMap_.find(seance.movie_.name_) == cachedMoviesToTheaterListMap_.end())
+            if (cachedMoviesToTheaterListMap_.find(seance.movie_) == cachedMoviesToTheaterListMap_.end())
             {
                 std::cout << "Not yet in cache: adding " << std::endl;
-                cachedMoviesToTheaterListMap_[seance.movie_.name_] = {seance.theater_.name_};
+                cachedMoviesToTheaterListMap_[seance.movie_] = {seance.theater_};
             }
             else
             {
                 std::cout << "Already in cache: append " << std::endl;
-                cachedMoviesToTheaterListMap_[seance.movie_.name_].push_back(seance.theater_.name_);
+                cachedMoviesToTheaterListMap_[seance.movie_].push_back(seance.theater_);
             }
         }
     }
@@ -140,11 +140,11 @@ void VolatileDatabase::addSeances(const std::vector<Seance>& seances)
     for ( const auto& seance : seances)
     {
         Seance s = seance;
-        MovieName movieName = utils::toLower(seance.movie_.name_);
-        TheaterName theaterName = utils::toLower(seance.theater_.name_);
+        MovieName movieName = utils::toLower(seance.movie_);
+        TheaterName theaterName = utils::toLower(seance.theater_);
 
-        s.movie_.name_ = movieName;
-        s.theater_.name_ = theaterName;
+        s.movie_= movieName;
+        s.theater_ = theaterName;
 
         seances_.push_back(s);
 
