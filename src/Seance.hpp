@@ -7,8 +7,10 @@
 #include <list>
 #include <array>
 
-using SeanceId = uint16_t;
+using SeanceId = int16_t;
 using Seats = std::list<uint16_t>;
+
+constexpr SeanceId INVALID_ID = -1;
 
 struct Seance
 {

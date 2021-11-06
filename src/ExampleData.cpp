@@ -16,9 +16,11 @@ ExampleData::ExampleData()
     std::sort(movies_.begin(), movies_.end());
 
     theatres_ = {
-            "NoweHoryzonty",
-            "Helios",
-            "CinemaCity"};
+            "cinemacity",
+            "helios",
+            "nowehoryzonty"};
+
+    std::sort(theatres_.begin(), theatres_.end());
 
     seances_ = {
             Seance{0, movies_[1], theatres_[0]},

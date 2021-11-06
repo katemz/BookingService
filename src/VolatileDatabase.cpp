@@ -2,11 +2,13 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-
+#include <set>
 #include "utils.hpp"
+#include <numeric>
 
 VolatileDatabase::VolatileDatabase()
     : seances_(),
+      availableSeats(),
       cachedAllMovies_(),
       cachedMoviesToTheaterListMap_()
 {
@@ -61,6 +63,12 @@ std::vector<TheaterName> VolatileDatabase::getAllTheatersPlayingMovie(const Movi
                 cachedMoviesToTheaterListMap_[seance.movie_].push_back(seance.theater_);
             }
         }
+
+        for (auto& e : cachedMoviesToTheaterListMap_)
+        {
+            std::sort(e.second.begin(), e.second.end());
+        }
+
     }
 
     std::cout << "map size : " << cachedMoviesToTheaterListMap_.size() << std::endl;
@@ -86,17 +94,38 @@ std::vector<TheaterName> VolatileDatabase::getAllTheatersPlayingMovie(const Movi
 
 }
 
-Seats VolatileDatabase::getSeatsForSeance(SeanceId id)
+//Seats VolatileDatabase::getSeatsForSeance(SeanceId id)
+//{
+//    // range check
+//    return reservations_[id];
+//}
+
+SeanceId VolatileDatabase::seanceIdForMovieInTheater(const MovieName& movie, const TheaterName& theater) const
 {
-    // range check
-    return reservations_[id];
+    auto it = std::find_if(seances_.begin(), seances_.end(),
+                           [&] (const Seance& s) { return ((s.movie_ == movie) && (s.theater_ == theater)); } );
+
+    SeanceId id = -1;
+    if (it != seances_.end())
+    {
+        id = it->id_;
+    }
+    return id;
 }
 
-bool VolatileDatabase::makeReservation(SeanceId id, const Seats& seats)
+bool VolatileDatabase::makeReservation(const MovieName& movie, const TheaterName& theater, const Seats& seats)
 {
+    SeanceId id = seanceIdForMovieInTheater(movie, theater);
+
+    if (id == INVALID_ID)
+    {
+        std::cout << "Error: no such seance. Reservation failed" << std::endl;
+        return false;
+    }
+
     // ensure no duplicates in request
 
-    Seats availableSeatsForSeance = reservations_[id];
+    Seats availableSeatsForSeance = availableSeats[id];
     Seats successfullyReserved;
 
 
@@ -116,9 +145,55 @@ bool VolatileDatabase::makeReservation(SeanceId id, const Seats& seats)
             return false;
         }
     }
-    reservations_[id] = availableSeatsForSeance;
+    availableSeats[id] = availableSeatsForSeance;
     return true;
 }
+
+Seats VolatileDatabase::getSeatsForSeance(const MovieName& movie, const TheaterName& theater)
+{
+    SeanceId id = seanceIdForMovieInTheater(movie, theater);
+
+    if (id == INVALID_ID)
+    {
+        std::cout << "Error: no such seance" << std::endl;
+        return Seats();
+    }
+
+    if (availableSeats.find(id) == availableSeats.end())
+    {
+       return Seats();
+    }
+
+    return availableSeats[id];
+}
+
+//bool VolatileDatabase::makeReservation(SeanceId id, const Seats& seats)
+//{
+//    // ensure no duplicates in request
+
+//    Seats availableSeatsForSeance = reservations_[id];
+//    Seats successfullyReserved;
+
+
+//    for (const uint16_t& seatId : seats)
+//    {
+//        auto seatPositionInAvailableList = std::find(availableSeatsForSeance.begin(), availableSeatsForSeance.end(), seatId);
+
+//        if(seatPositionInAvailableList != availableSeatsForSeance.end() )
+//        {
+//            std::cout << "Seat id: " << seatId << " is available " << std::endl;
+//            availableSeatsForSeance.remove(seatId);
+//            successfullyReserved.push_back(seatId);
+//        }
+//        else
+//        {
+//            std::cout << "Seat id: " << seatId << " is already taken; error " << std::endl;
+//            return false;
+//        }
+//    }
+//    reservations_[id] = availableSeatsForSeance;
+//    return true;
+//}
 
 void VolatileDatabase::reset()
 {
@@ -148,7 +223,7 @@ void VolatileDatabase::addSeances(const std::vector<Seance>& seances)
 
         seances_.push_back(s);
 
-        reservations_[s.id_] = Seats(SEATS_COUNT);
-        std::iota(reservations_[s.id_].begin(), reservations_[s.id_].end(), 0);
+        availableSeats[s.id_] = Seats(SEATS_COUNT);
+        std::iota(availableSeats[s.id_].begin(), availableSeats[s.id_].end(), 0);
     }
 }
