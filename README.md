@@ -2,7 +2,7 @@
 
 BookingService implements a backend for a service allowing to make reservation for a movie.
 
-It's mounted on the address: ***<service_address>/api/*** [by default ***127.0.0.1/api/*** ].
+It's mounted on the address: **<service_address>/api/** (by default **127.0.0.1/api/**).
 
 #### Assumptions
 - There is max. 1 seance of specific movie for a theater (no time/calendar)
@@ -16,42 +16,42 @@ Service supports following requests:
 
 ### GET
 
----
+***
 
-#### Get all movies requests
+### Get all movies requests
 
 ##### Request
-***<service_address>/api/getallmovies***
+`<service_address>/api/getallmovies`
 
 ##### JSON Response
-movies: all movies as string array
+- movies: all movies as string array
 
 `{"movies":[ "movie1", "movie2"...]}`
 
 ***
 
-#### Get all theaters playing specified movie
+### Get all theaters playing specified movie
 
 ##### Request
-***<service_address>/api/gettheatersplayingmovie/<moviename>***
+`<service_address>/api/gettheatersplayingmovie/<moviename>`
 
-#### JSON Response
-movie: specified movie
-theaters: all theaters that play movie as string array
+##### JSON Response
+- movie: specified movie
+- theaters: all theaters that play movie as string array
 
 `{"movie":"<movie>","theaters":["theater1", "theater2"...]}`
 
 ***
 
-#### Get available seats for movie in theater
+### Get available seats for movie in theater
 
 ##### Request
-***<service_address>/api/getseatsforseance/<moviename>/<theatername>***
+`<service_address>/api/getseatsforseance/<moviename>/<theatername>`
 
 #### JSON Response
-available_seats: available seats ids as number array
-movie: specified movie
-theater: specified theater
+- available_seats: available seats ids as number array
+- movie: specified movie
+- theater: specified theater
 
 `{"available_seats": [id1, id2, id3...], "movie":"<movie>","theater":"<theater>"}`
 
@@ -61,9 +61,12 @@ theater: specified theater
 
 #### Request
 
-<service_address>/api/reserve
+`<service_address>/api/reserve`
 
-JSON: 
+JSON input: 
+- movie: movie to reserve
+- theater: theater to reserve
+- seats: seats ids to reserve as a number array
 
 ```
 {
