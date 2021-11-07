@@ -2,7 +2,7 @@
 
 BookingService implements a backend for a service allowing to make reservation for a movie.
 
-It's mounted on the address: **<service_address>/api/** (by default **127.0.0.1/api/**).
+It's mounted on the address: **<service_address>/api/** (by default **127.0.0.1:8080/api/**).
 
 #### Assumptions
 - There is max. 1 seance of specific movie for a theater (no time/calendar)
