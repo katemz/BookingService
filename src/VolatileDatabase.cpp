@@ -8,7 +8,7 @@
 
 VolatileDatabase::VolatileDatabase()
     : seances_(),
-      availableSeats(),
+      availableSeats_(),
       cachedAllMovies_(),
       cachedMoviesToTheaterListMap_()
 {
@@ -92,7 +92,7 @@ bool VolatileDatabase::makeReservation(const MovieName& movie, const TheaterName
 
     // ensure no duplicates in request
 
-    Seats availableSeatsForSeance = availableSeats[id];
+    Seats availableSeatsForSeance = availableSeats_[id];
     Seats successfullyReserved;
 
     for (const uint16_t& seatId : seats)
@@ -110,7 +110,7 @@ bool VolatileDatabase::makeReservation(const MovieName& movie, const TheaterName
             return false;
         }
     }
-    availableSeats[id] = availableSeatsForSeance;
+    availableSeats_[id] = availableSeatsForSeance;
     return true;
 }
 
@@ -124,12 +124,12 @@ Seats VolatileDatabase::getSeatsForSeance(const MovieName& movie, const TheaterN
         return Seats();
     }
 
-    if (availableSeats.find(id) == availableSeats.end())
+    if (availableSeats_.find(id) == availableSeats_.end())
     {
         return Seats();
     }
 
-    return availableSeats[id];
+    return availableSeats_[id];
 }
 
 void VolatileDatabase::reset()
@@ -160,7 +160,7 @@ void VolatileDatabase::addSeances(const std::vector<Seance>& seances)
 
         seances_.push_back(s);
 
-        availableSeats[s.id_] = Seats(SEATS_COUNT);
-        std::iota(availableSeats[s.id_].begin(), availableSeats[s.id_].end(), 0);
+        availableSeats_[s.id_] = Seats(SEATS_COUNT);
+        std::iota(availableSeats_[s.id_].begin(), availableSeats_[s.id_].end(), 0);
     }
 }

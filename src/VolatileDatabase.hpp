@@ -84,7 +84,7 @@ protected:
     /**
      * Available seats for seance
      */
-    std::map<SeanceId, Seats> availableSeats;
+    std::map<SeanceId, Seats> availableSeats_;
 
     /**
      * Cached list of all played movies
