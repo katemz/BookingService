@@ -114,4 +114,14 @@ TEST_F(RequestProcessorTests, GET_getSeatsForSeance_invalidPath)
     EXPECT_EQ(jsonReply, json::value::null());
 }
 
+TEST_F(RequestProcessorTests, GET_getSeatsForSeance_OK)
+{
+    std::vector<std::string> path = {"getseatsforseance", "dune", "cinemacity"};
+    json::value jsonReply;
+
+//    status_code status = rp_.handleGet(path, jsonReply);
+//    EXPECT_EQ(status, status_codes::BadRequest);
+//    EXPECT_EQ(jsonReply, json::value::null());
+}
+
 

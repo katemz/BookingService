@@ -9,14 +9,13 @@ class VolatileDatabaseTests : public ::testing::Test {
 public:
     VolatileDatabaseTests( )
     {
+        MOVIES_ = data_.getExampleMoviesList();
+        THEATERS_ = data_.getExampleTheatersList();
+        SEANCES_ = data_.getExampleSeancesList();
     }
 
     void SetUp( )
     {
-        MOVIES_ = data_.getExampleMoviesList();
-        THEATERS_ = data_.getExampleTheatersList();
-        SEANCES_ = data_.getExampleSeancesList();
-
         db_.reset();
         db_.addSeances(SEANCES_);
     }

@@ -40,15 +40,14 @@ public:
      */
     std::string endpoint() const;
 
-
     pplx::task<void> accept();
     pplx::task<void> shutdown();
-
-    virtual void initRestOpHandlers() = 0;
 
     std::vector<utility::string_t> requestPath(const http_request & message);
 
 protected:
+    virtual void initRestOpHandlers() = 0;
+
     http_listener listener_;
 private:
     uri_builder endpointBuilder_;
