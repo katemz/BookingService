@@ -2,9 +2,8 @@
 #define IDATABASE_HPP
 
 #include <vector>
-#include "Movie.hpp"
-#include "Theater.hpp"
 #include "Seance.hpp"
+#include "utils.hpp"
 
 /**
  * Interface class for Booking Service database operations

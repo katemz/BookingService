@@ -4,8 +4,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "Movie.hpp"
-#include "Theater.hpp"
+#include <mutex>
 #include "Seance.hpp"
 #include "IDatabase.hpp"
 
@@ -98,6 +97,11 @@ protected:
      * This list should be cleared with clearCache when seances_ list is updated
      */
     std::map<MovieName, std::vector<TheaterName>> cachedMoviesToTheaterListMap_;
+
+    /**
+     * Mutex to ensure no overbooking
+     */
+    std::mutex dbReserveMutex_;
 };
 
 #endif // VOLATILEDATABASE_HPP

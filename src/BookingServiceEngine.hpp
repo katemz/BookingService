@@ -3,9 +3,7 @@
 
 #include <memory>
 #include "RestApiController.hpp"
-#include <IDatabase.hpp>
-
-
+#include "RequestProcessor.hpp"
 
 class BookingServiceEngine : public RestApiController
 {
@@ -17,10 +15,10 @@ public:
     void handlePut(http_request message);
     void initRestOpHandlers() override;
 
-    void setDatabaseHandler(std::shared_ptr<IDatabase> dbPtr);
+    void setRequestProcessorHandler(std::shared_ptr<IRequestProcessor> requestProcessor);
 
 private:
-    std::shared_ptr<IDatabase> database_;
+    std::shared_ptr<IRequestProcessor> requestProcessor_;
 };
 
 #endif // BOOKINGSERVICEENGINE_H

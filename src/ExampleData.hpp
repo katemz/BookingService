@@ -1,12 +1,14 @@
 #ifndef EXAMPLEDATA_HPP
 #define EXAMPLEDATA_HPP
 
-#include "Movie.hpp"
-#include "Theater.hpp"
 #include "Seance.hpp"
-
+#include "utils.hpp"
 #include <vector>
 
+
+/**
+ * This class returns sets of example data for testing
+ */
 class ExampleData
 {
 public:

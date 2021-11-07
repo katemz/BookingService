@@ -34,32 +34,18 @@ std::vector<MovieName> VolatileDatabase::getAllPlayingMovies()
 
 std::vector<TheaterName> VolatileDatabase::getAllTheatersPlayingMovie(const MovieName &movie)
 {
-    std::cout << "Get all theaters playing movie: " << movie << std::endl;
-
-    MovieName movieNameLower = movie;
-
-    std::transform(movieNameLower.begin(),
-                   movieNameLower.end(),
-                   movieNameLower.begin(),
-                   ::tolower);
-
+    MovieName movieNameLower = utils::toLower(movie);
 
     if (cachedMoviesToTheaterListMap_.empty())
     {
-        std::cout << "Cache is empty... searching " << std::endl;
-
         for (const auto& seance : seances_)
         {
-            std::cout << "Seance: " << seance.movie_ << " in " << seance.theater_ << std::endl;
-
             if (cachedMoviesToTheaterListMap_.find(seance.movie_) == cachedMoviesToTheaterListMap_.end())
             {
-                std::cout << "Not yet in cache: adding " << std::endl;
                 cachedMoviesToTheaterListMap_[seance.movie_] = {seance.theater_};
             }
             else
             {
-                std::cout << "Already in cache: append " << std::endl;
                 cachedMoviesToTheaterListMap_[seance.movie_].push_back(seance.theater_);
             }
         }
@@ -68,44 +54,23 @@ std::vector<TheaterName> VolatileDatabase::getAllTheatersPlayingMovie(const Movi
         {
             std::sort(e.second.begin(), e.second.end());
         }
-
     }
 
-    std::cout << "map size : " << cachedMoviesToTheaterListMap_.size() << std::endl;
-
-
-    for (const auto& elem : cachedMoviesToTheaterListMap_)
-    {
-        std::cout << "Movie: " << elem.first << " is played in:\n ";
-
-        for (const auto& th : elem.second)
-        {
-            std::cout << "         " << th << std::endl;
-        }
-    }
-    std::cout << std::endl;
-
-    std::vector<TheaterName> theaterList;
+    std::vector<TheaterName> theatersList;
     if (cachedMoviesToTheaterListMap_.find(movieNameLower) != cachedMoviesToTheaterListMap_.end())
     {
-        theaterList = cachedMoviesToTheaterListMap_[movieNameLower];
+        theatersList = cachedMoviesToTheaterListMap_[movieNameLower];
     }
-    return theaterList;
 
+    return theatersList;
 }
-
-//Seats VolatileDatabase::getSeatsForSeance(SeanceId id)
-//{
-//    // range check
-//    return reservations_[id];
-//}
 
 SeanceId VolatileDatabase::seanceIdForMovieInTheater(const MovieName& movie, const TheaterName& theater) const
 {
     auto it = std::find_if(seances_.begin(), seances_.end(),
                            [&] (const Seance& s) { return ((s.movie_ == movie) && (s.theater_ == theater)); } );
 
-    SeanceId id = -1;
+    SeanceId id = INVALID_ID;
     if (it != seances_.end())
     {
         id = it->id_;
@@ -115,6 +80,8 @@ SeanceId VolatileDatabase::seanceIdForMovieInTheater(const MovieName& movie, con
 
 bool VolatileDatabase::makeReservation(const MovieName& movie, const TheaterName& theater, const Seats& seats)
 {
+    const std::lock_guard<std::mutex> lock(dbReserveMutex_);
+
     SeanceId id = seanceIdForMovieInTheater(movie, theater);
 
     if (id == INVALID_ID)
@@ -128,14 +95,12 @@ bool VolatileDatabase::makeReservation(const MovieName& movie, const TheaterName
     Seats availableSeatsForSeance = availableSeats[id];
     Seats successfullyReserved;
 
-
     for (const uint16_t& seatId : seats)
     {
         auto seatPositionInAvailableList = std::find(availableSeatsForSeance.begin(), availableSeatsForSeance.end(), seatId);
 
         if(seatPositionInAvailableList != availableSeatsForSeance.end() )
         {
-            std::cout << "Seat id: " << seatId << " is available " << std::endl;
             availableSeatsForSeance.remove(seatId);
             successfullyReserved.push_back(seatId);
         }
@@ -161,39 +126,11 @@ Seats VolatileDatabase::getSeatsForSeance(const MovieName& movie, const TheaterN
 
     if (availableSeats.find(id) == availableSeats.end())
     {
-       return Seats();
+        return Seats();
     }
 
     return availableSeats[id];
 }
-
-//bool VolatileDatabase::makeReservation(SeanceId id, const Seats& seats)
-//{
-//    // ensure no duplicates in request
-
-//    Seats availableSeatsForSeance = reservations_[id];
-//    Seats successfullyReserved;
-
-
-//    for (const uint16_t& seatId : seats)
-//    {
-//        auto seatPositionInAvailableList = std::find(availableSeatsForSeance.begin(), availableSeatsForSeance.end(), seatId);
-
-//        if(seatPositionInAvailableList != availableSeatsForSeance.end() )
-//        {
-//            std::cout << "Seat id: " << seatId << " is available " << std::endl;
-//            availableSeatsForSeance.remove(seatId);
-//            successfullyReserved.push_back(seatId);
-//        }
-//        else
-//        {
-//            std::cout << "Seat id: " << seatId << " is already taken; error " << std::endl;
-//            return false;
-//        }
-//    }
-//    reservations_[id] = availableSeatsForSeance;
-//    return true;
-//}
 
 void VolatileDatabase::reset()
 {

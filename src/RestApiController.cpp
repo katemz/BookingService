@@ -1,6 +1,6 @@
 #include "RestApiController.hpp"
 
-RestApiController::RestApiController(const std::string& naddress,const std::string& nport)
+RestApiController::RestApiController(const std::string& naddress, const std::string& nport)
 {
    endpointBuilder_.set_host(naddress);
    endpointBuilder_.set_port(nport);
@@ -9,6 +9,7 @@ RestApiController::RestApiController(const std::string& naddress,const std::stri
 
 RestApiController::~RestApiController()
 {
+    shutdown();
 }
 
 void RestApiController::setEndpoint(const std::string& mount_point)
