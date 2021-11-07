@@ -51,8 +51,16 @@ This project includes **gtest** as submodule so to clone it with gtest call:
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" 
 make all
-./test/ExampleProject_tst
-./src/ExampleProject_run
+```
+
+Run app from BookingService/build directory:
+```
+./src/BookingService_run
+```
+
+Run UT from BookingService/build directory:
+```
+./test/BookingService_test
 ```
 
 
