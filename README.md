@@ -16,15 +16,15 @@ Service supports following requests:
 
 ### GET
 
-***
+---
 
 #### Get all movies requests
 
 ##### Request
-<service_address>/api/getallmovies
+***<service_address>/api/getallmovies***
 
 ##### JSON Response
-movies: All movies as string array
+movies: all movies as string array
 
 `{"movies":[ "movie1", "movie2"...]}`
 
@@ -33,11 +33,11 @@ movies: All movies as string array
 #### Get all theaters playing specified movie
 
 ##### Request
-<service_address>/api/gettheatersplayingmovie/<moviename>
+***<service_address>/api/gettheatersplayingmovie/<moviename>***
 
 #### JSON Response
-movie: Specified movie
-theaters: All theaters that play movie as string array
+movie: specified movie
+theaters: all theaters that play movie as string array
 
 `{"movie":"<movie>","theaters":["theater1", "theater2"...]}`
 
@@ -46,7 +46,7 @@ theaters: All theaters that play movie as string array
 #### Get available seats for movie in theater
 
 ##### Request
-<service_address>/api/getseatsforseance/<moviename>/<theatername>
+***<service_address>/api/getseatsforseance/<moviename>/<theatername>***
 
 #### JSON Response
 available_seats: available seats ids as number array
@@ -65,19 +65,24 @@ theater: specified theater
 
 JSON: 
 
+```
 {
     "movie": "<movie>",
     "theater": "<theater>",
     "seats": [id1, id2, id3...]
 }
+```
+
 
 #### Response
 * Successfully reserved
-status_codes::OK
+
+Returns **status_codes::OK**
 
 
-* Reservation failed: invalid seance or seats already taken
-status_codes::BadRequest
+* Reservation failed (invalid seance or seats already taken)
+
+Returns **status_codes::BadRequest**
 
 # Installation
 
