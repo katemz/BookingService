@@ -116,12 +116,25 @@ TEST_F(RequestProcessorTests, GET_getSeatsForSeance_invalidPath)
 
 TEST_F(RequestProcessorTests, GET_getSeatsForSeance_OK)
 {
-    std::vector<std::string> path = {"getseatsforseance", "dune", "cinemacity"};
+    std::string movie = "dune";
+    std::string theater = "cinemacity";
+
+    std::vector<std::string> path = {"getseatsforseance", movie, theater};
     json::value jsonReply;
 
-//    status_code status = rp_.handleGet(path, jsonReply);
-//    EXPECT_EQ(status, status_codes::BadRequest);
-//    EXPECT_EQ(jsonReply, json::value::null());
+    Seats seats = {1,2,3,4,5,6,13,14,15,16};
+    EXPECT_CALL(*dbMock_, getSeatsForSeance(movie, theater)).WillOnce(Return(seats));
+
+    status_code status = rp_.handleGet(path, jsonReply);
+    EXPECT_EQ(status, status_codes::OK);
+
+    json::array jsonReplyAvailableSeats = jsonReply["available_seats"].as_array();
+    Seats result;
+    result.resize(jsonReplyAvailableSeats.size());
+
+    std::transform(jsonReplyAvailableSeats.begin(), jsonReplyAvailableSeats.end(), result.begin(),
+                   [](json::value val) -> uint16_t { return val.as_integer(); });
+    EXPECT_EQ(result, seats);
 }
 
 
