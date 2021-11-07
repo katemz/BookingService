@@ -98,6 +98,11 @@ Returns **status_codes::BadRequest**
 * ssl
 * **cpprest**
 
+## Clone
+This project includes **gtest** as submodule so to clone it with gtest call:
+
+`git clone --recurse-submodules --remote-submodules git@github.com:katemz/BookingService.git`
+
 ## Build and run
 ```
 cd build
