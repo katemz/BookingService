@@ -16,76 +16,19 @@ Service supports following requests:
 
 ### GET
 
-***
-
-### Get all movies requests
-
-##### Request
-`<service_address>/api/getallmovies`
-
-##### JSON Response
-- movies: all movies as string array
-
-`{"movies":[ "movie1", "movie2"...]}`
-
-***
-
-### Get all theaters playing specified movie
-
-##### Request
-`<service_address>/api/gettheatersplayingmovie/<moviename>`
-
-##### JSON Response
-- movie: specified movie
-- theaters: all theaters that play movie as string array
-
-`{"movie":"<movie>","theaters":["theater1", "theater2"...]}`
-
-***
-
-### Get available seats for movie in theater
-
-##### Request
-`<service_address>/api/getseatsforseance/<moviename>/<theatername>`
-
-#### JSON Response
-- available_seats: available seats ids as number array
-- movie: specified movie
-- theater: specified theater
-
-`{"available_seats": [id1, id2, id3...], "movie":"<movie>","theater":"<theater>"}`
-
+| Request   |      URL      |  JSON return value |
+|-----------|:-------------:|:-------------------|
+| Get all movies |`<service_address>/api/`<br />`getallmovies`| - movies: all movies as string array <br />`{"movies":[ "movie1", "movie2"...]}`|
+| Get all theaters playing specified movie |`<service_address>/api/`<br /> `gettheatersplayingmovie/<moviename>`| - movie: specified movie <br /> - theaters: all theaters that play movie as string array<br />`{"movie":"<movie>","theaters":["theater1", "theater2"...]}` |
+| Get available seats for movie in theater | `<service_address>/api/`<br /> `getseatsforseance/<moviename>/<theatername>` | - available_seats: available seats ids as number array<br /> - movie: specified movie<br /> - theater: specified theater<br /> `{"available_seats": [id1, id2, id3...], "movie":"<movie>","theater":"<theater>"}` |
+    
 ### PUT
+| Request   |      URL      |  JSON input | Status codes |
+|-----------|:-------------:|:-------------------|:-------|
+| Reserve seats for seance |`<service_address>/api/`<br />`reserve`| - movie: movie to reserve<br /> - theater: theater to reserve<br /> - seats: seats ids to reserve as a number array<br />`{"movie": "<movie>", "theater": "<theater>", "seats": [id1, id2, id3...]`| `status_codes::OK`: successfully reserved <br />`status_codes::BadRequest`: reservation failed (invalid seance or seats already taken) |
 
 ***
 
-#### Request
-
-`<service_address>/api/reserve`
-
-JSON input: 
-- movie: movie to reserve
-- theater: theater to reserve
-- seats: seats ids to reserve as a number array
-
-```
-{
-    "movie": "<movie>",
-    "theater": "<theater>",
-    "seats": [id1, id2, id3...]
-}
-```
-
-
-#### Response
-* Successfully reserved
-
-Returns **status_codes::OK**
-
-
-* Reservation failed (invalid seance or seats already taken)
-
-Returns **status_codes::BadRequest**
 
 # Installation
 
