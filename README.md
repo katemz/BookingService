@@ -2,10 +2,10 @@
 
 BookingService implements a backend for a service allowing to make reservation for a movie.
 
-It's mounted on the address: **<service_address>/api/** (by default **127.0.0.1:8080/api/**).
+It's bound on the address: **<service_address>/api/** (by default **127.0.0.1:8080/api/**).
 
 #### Assumptions
-- There is max. 1 seance of specific movie for a theater (no time/calendar)
+- There is max. 1 show of specific movie for a theater (no time/calendar)
 - Movie name is unique
 - Theater name is unique
 - All theaters have 20 seats
@@ -25,7 +25,7 @@ Service supports following requests:
 ### PUT
 | Request   |      URL      |  JSON input | Status codes |
 |-----------|:-------------:|:-------------------|:-------|
-| Reserve seats for seance |`<service_address>/api/`<br />`reserve`| - movie: movie to reserve<br /> - theater: theater to reserve<br /> - seats: seats ids to reserve as a number array<br />`{"movie": "<movie>", "theater": "<theater>", "seats": [id1, id2, id3...]`| `status_codes::OK`: successfully reserved <br />`status_codes::BadRequest`: reservation failed (invalid seance or seats already taken) |
+| Reserve seats for show |`<service_address>/api/`<br />`reserve`| - movie: movie to reserve<br /> - theater: theater to reserve<br /> - seats: seats ids to reserve as a number array<br />`{"movie": "<movie>", "theater": "<theater>", "seats": [id1, id2, id3...]`| `status_codes::OK`: successfully reserved <br />`status_codes::BadRequest`: reservation failed (invalid seance or seats already taken) |
 
 ***
 
