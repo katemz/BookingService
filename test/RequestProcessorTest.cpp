@@ -137,4 +137,29 @@ TEST_F(RequestProcessorTests, GET_getSeatsForSeance_OK)
     EXPECT_EQ(result, seats);
 }
 
+TEST_F(RequestProcessorTests, PUT_reserve_OK)
+{
+    std::string movie = "dune";
+    std::string theater = "cinemacity";
+    Seats seats = {1,2,3,4,5,6,13,14,15,16};
+
+    std::vector<std::string> path = {"reserve"};
+    json::value inputJson;
+    json::value jsonReply;
+
+    std::vector <json::value> jsonSeats;
+    for (auto& s: seats)
+        jsonSeats.push_back(json::value(s));
+
+    inputJson["movie"] = json::value(movie);
+    inputJson["theater"] = json::value(theater);
+    inputJson["seats"] = json::value::array(jsonSeats);
+
+    EXPECT_CALL(*dbMock_, makeReservation(movie, theater, seats)).WillOnce(Return(true));
+
+    status_code status = rp_.handlePut(path, inputJson, jsonReply);
+    EXPECT_EQ(status, status_codes::OK);
+}
+
+
 

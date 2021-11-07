@@ -12,7 +12,6 @@ using Seats = std::list<uint16_t>;
 static constexpr SeanceId INVALID_ID = -1;
 static constexpr uint16_t SEATS_COUNT = 20;
 
-
 struct Seance
 {
     SeanceId id_;

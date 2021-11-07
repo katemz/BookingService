@@ -120,7 +120,6 @@ status_code RequestProcessor::handlePutReserve(json::value jsonVal, json::value&
         for (auto& seat: seatsJsonVector)
         {
             seatsUintVector.push_back(seat.as_integer());
-            std::cout << "," << seat.as_integer() << std::endl;
         }
 
         bool success = database_->makeReservation(movie, theater, seatsUintVector);
@@ -131,8 +130,8 @@ status_code RequestProcessor::handlePutReserve(json::value jsonVal, json::value&
         }
         else
         {
-            //todo add error des
-            return status_codes::InternalError;
+            //todo: add error description in jsonReply
+            return status_codes::BadRequest;
         }
 
     }
